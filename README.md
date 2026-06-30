@@ -11,3 +11,5 @@ Plataforma web de comunicación escolar digital que reemplaza la libreta de comu
 ## Equipo
 - lanusroots (Maximiliano Fernández)
 - fernandezmaxar
+
+_Repositorio gestionado con flujo Scrum y revisión de código entre pares._
