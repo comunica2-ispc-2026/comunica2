@@ -23,6 +23,7 @@
 | 26/04/2026 | 1.0 | Entrega Evidencia 1: situación, solución, requerimientos, backlog, actas | Equipo |
 | *(actual)* | 1.1 | Incorporación de Historias de Usuario (Parte II, sección 6) | lanusroots |
 | *(actual)* | 1.2 | Nota metodológica: desarrollo individual transparente | lanusroots |
+| *(actual)* | 1.3 | Proceso de trabajo ágil: Git Flow, DoR, DoD, Story Points, Code Review | lanusroots |
 
 ## Nota metodológica
 
@@ -38,6 +39,69 @@ aprobada, de modo que el *code review* es real y queda registrado en el historia
 Las ceremonias de equipo (dailies, *sprint reviews*, retrospectivas y actas) se documentan
 reflejando esta modalidad individual. La Parte I de este documento conserva el contenido de la
 Evidencia 1 tal como fue elaborada en la fase de arranque del proyecto.
+
+## Proceso de trabajo ágil
+
+### Flujo de ramas (Git Flow)
+
+| Rama | Propósito |
+|------|-----------|
+| `main` | Código estable y entregable. Solo recibe *merges* al cerrar un sprint o una versión. Protegida. |
+| `develop` | Rama de integración. Reúne las funcionalidades terminadas. Protegida. |
+| `feature/HU-XX-descripcion` | Una rama por Historia de Usuario, creada desde `develop`. |
+| `release/vX.Y` | Preparación de una entrega/versión (ajustes finales, sin nuevas funcionalidades). |
+| `hotfix/descripcion` | Corrección urgente sobre `main` ya entregado. |
+
+**Convención de commits:** `feat` (funcionalidad), `fix` (corrección), `refactor` (reorganización), `docs` (documentación), `chore` (tareas técnicas). Formato: `tipo(HU-XX): descripción`.
+
+**Integración:** ninguna rama protegida (`main`, `develop`) se modifica con *push* directo. Todo cambio pasa por *Pull Request* con revisión aprobada por la cuenta revisora.
+
+### Definition of Ready (DoR) — cuándo una HU puede entrar a un sprint
+
+Una Historia de Usuario está *lista* para ser comprometida cuando:
+
+- Tiene descripción en formato "Como… quiero… para…".
+- Tiene criterios de aceptación en formato DADO / CUANDO / ENTONCES.
+- Está estimada en *Story Points*.
+- Tiene identificadas sus dependencias (p. ej., requiere el modelo de datos previo).
+- Está cargada como *Issue* en GitHub, con su *label*, *milestone* y responsable asignado.
+
+### Definition of Done (DoD) — cuándo una HU está terminada
+
+Una Historia de Usuario está *terminada* cuando:
+
+- El código implementa y satisface **todos** sus criterios de aceptación.
+- Sigue las convenciones del stack (PEP 8 en Python/Django; guía de estilo de Angular).
+- Se integró mediante *Pull Request* hacia `develop`.
+- Tuvo *code review* aprobado según el checklist de calidad (por la cuenta revisora).
+- No rompe la compilación ni las pruebas (cuando exista integración continua).
+- Está documentado lo necesario (docstrings/comentarios; endpoints en Swagger si aplica).
+- El *Issue* quedó cerrado y la tarjeta movida a *Done* en el tablero.
+- La rama *feature* fue borrada tras el *merge*.
+
+### Estimación con Story Points
+
+Se usa la sucesión de Fibonacci como escala de complejidad relativa:
+
+| Puntos | Interpretación |
+|--------|----------------|
+| 1 | Trivial (cambio mínimo, sin incertidumbre). |
+| 2–3 | Sencilla, bien acotada. |
+| 5 | Complejidad media. |
+| 8 | Compleja; conviene revisar si puede dividirse. |
+| 13 | Muy compleja; **debe** dividirse en historias menores. |
+
+### Checklist de Code Review
+
+Toda revisión de *Pull Request* sigue las seis dimensiones de calidad. El detalle operativo vive
+en la plantilla de *Pull Request* del repositorio (`.github/pull_request_template.md`):
+
+1. **Legibilidad** — código claro, nombres descriptivos.
+2. **Seguridad** — sin credenciales expuestas, entradas validadas, acceso por rol respetado.
+3. **Pruebas** — probado localmente; pruebas pasan cuando aplican.
+4. **Arquitectura** — respeta la separación de capas (modelo / API / cliente).
+5. **Convenciones** — sigue el estilo del stack y la convención de commits.
+6. **Documentación** — lo necesario para entender y mantener el código.
 
 ---
 
