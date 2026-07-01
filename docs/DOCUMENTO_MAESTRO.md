@@ -430,6 +430,47 @@ Endpoints por módulo, autenticación por token, manejo de errores y validacione
 ## 10. Documentación de la API
 Documentación de endpoints con Swagger / Postman.
 
+## 11. Actas de ceremonias ágiles (fase de desarrollo)
+ 
+> Registro de las ceremonias Scrum de la fase de construcción (recuperación). Se documentan bajo la modalidad de desarrollo individual con dos roles declarada en la Nota metodológica.
+ 
+### Sprint Planning — Sprint 1 — Miércoles 01/07/2026 · Modalidad: planificación individual (roles Dev A / Dev B)
+ 
+**Participantes:** Maximiliano Fernández, operando los dos roles de desarrollo declarados — Desarrollador A (`lanusroots`) y Desarrollador B (`fernandezmaxar`). Las funciones de Product Owner y Scrum Master son asumidas por el mismo autor.
+ 
+**Ventana del Sprint:** 01/07/2026 – 18/07/2026 (milestone "Sprint 1").
+ 
+**Objetivo del Sprint (Sprint Goal):** dejar el backend operativo con autenticación por roles y la gestión base de alumnos, vínculos familiares y comunicados con acuse de lectura.
+ 
+**Temas tratados:** revisión del Sprint Backlog heredado del Sprint 0; confirmación del alcance; validación de las estimaciones (Story Points ya asignados por HU); análisis de dependencias entre historias; reparto del trabajo entre los dos roles de desarrollo; definición del Sprint Goal.
+ 
+**Decisiones:**
+- Se confirma el alcance del Sprint 1: 5 historias de usuario (HU-01, HU-04, HU-05, HU-07, HU-08) más una tarea técnica de setup del backend.
+- Se incorpora la **tarea técnica de setup** (proyecto Django + DRF + PostgreSQL + usuario con roles) como prerequisito de todas las HU, asignada al Desarrollador A.
+- Se define el **orden por dependencias**: setup → HU-01 → dos cadenas en paralelo: (HU-04 → HU-05) a cargo del Dev B y (HU-07 → HU-08) a cargo del Dev A.
+- **Regla de revisión cruzada:** todo PR del Dev A lo aprueba el Dev B y viceversa; ninguna cuenta aprueba su propio PR (garantizado por las ramas protegidas).
+- **Contingencia de capacity:** si el tiempo se ajusta, la HU-08 (acuse de lectura) es la primera candidata a diferirse al Sprint 2, por ser la de menor dependencia aguas abajo.
+**Compromiso del Sprint:**
+ 
+| Issue | HU / Tarea | Story Points | Rol responsable | Depende de |
+|-------|-----------|:------------:|-----------------|-----------|
+| #28 | Setup del backend (técnico) | — | Dev A · `lanusroots` | — |
+| #4  | HU-01 · Login + roles | 8 | Dev A · `lanusroots` | Setup |
+| #7  | HU-04 · Registro de alumnos | 5 | Dev B · `fernandezmaxar` | Setup · roles (HU-01) |
+| #8  | HU-05 · Vínculo alumno–familia | 5 | Dev B · `fernandezmaxar` | HU-04 |
+| #10 | HU-07 · Envío de comunicados | 8 | Dev A · `lanusroots` | Setup · roles (HU-01) |
+| #11 | HU-08 · Acuse de lectura | 8 | Dev A · `lanusroots` | HU-07 |
+ 
+> Story Points comprometidos del Sprint: **34 SP** (la tarea técnica de setup, #28, no se estima). Reparto por rol: Dev A = 24 SP (HU-01, HU-07, HU-08) + setup; Dev B = 10 SP (HU-04, HU-05).
+ 
+**Tareas / acciones (responsable, fecha):**
+- Crear el issue técnico de setup y sumarlo al milestone Sprint 1 (Dev A, 01/07).
+- Asignar las 5 HU a sus roles mediante `gh issue edit` (Dev A, 01/07).
+- Ejecutar el setup del backend y abrir su PR (Dev A, 02/07).
+- Mover cada tarjeta a *In Progress* al abrir su rama de trabajo (rol responsable, durante el sprint).
+- Revisar y aprobar de forma cruzada cada PR antes del merge (rol opuesto, durante el sprint).
+**Observaciones:** primera ceremonia registrada bajo la modalidad de dos roles de desarrollo. A partir de acá se documentan también las Dailies (breves, por avance), la Sprint Review y la Retrospectiva al cierre del sprint.
+
 ---
 
 # PARTE IV · Frontend e integración
