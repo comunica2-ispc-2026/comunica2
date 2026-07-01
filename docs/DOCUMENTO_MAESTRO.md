@@ -7,8 +7,8 @@
 | **Carrera** | Tecnicatura Superior en Desarrollo Web y Aplicaciones Digitales |
 | **Espacio curricular** | Proyecto Integrador II — 2026 (Anual) |
 | **Docente** | Alejandro Vicente SANTANGELO |
-| **Autor** | Maximiliano Fernández — desarrollo individual |
-| **Cuentas GitHub** | `lanusroots` (developer) · `fernandezmaxar` (revisor) — ambas del autor |
+| **Autor** | Maximiliano Fernández — desarrollo individual, dos roles declarados |
+| **Cuentas GitHub** | `lanusroots` (Desarrollador A) · `fernandezmaxar` (Desarrollador B) — ambas del autor |
 | **Repositorio** | https://github.com/comunica2-ispc-2026/comunica2 |
 
 > Este es el documento maestro del proyecto: la fuente única de verdad de la documentación
@@ -21,24 +21,33 @@
 | Fecha | Versión | Cambios | Autor |
 |-------|---------|---------|-------|
 | 26/04/2026 | 1.0 | Entrega Evidencia 1: situación, solución, requerimientos, backlog, actas | Equipo |
-| *(actual)* | 1.1 | Incorporación de Historias de Usuario (Parte II, sección 6) | lanusroots |
-| *(actual)* | 1.2 | Nota metodológica: desarrollo individual transparente | lanusroots |
-| *(actual)* | 1.3 | Proceso de trabajo ágil: Git Flow, DoR, DoD, Story Points, Code Review | lanusroots |
+| 30/06/2026 | 1.1 | Incorporación de Historias de Usuario (Parte II, sección 6) | lanusroots |
+| 30/06/2026 | 1.2 | Nota metodológica: desarrollo individual transparente | lanusroots |
+| 30/06/2026 | 1.3 | Proceso de trabajo ágil: Git Flow, DoR, DoD, Story Points, Code Review | lanusroots |
+| 01/07/2026 | 1.4 | Nota metodológica revisada: dos roles de desarrollo declarados, ambas cuentas aportan código | lanusroots |
 
 ## Nota metodológica
 
-Este proyecto es desarrollado de forma **individual** por Maximiliano Fernández.
+Este proyecto es desarrollado por una sola persona (Maximiliano Fernández), que opera **dos
+roles de desarrollo** de forma declarada, mediante dos cuentas de GitHub, con el fin de
+reproducir de manera completa el flujo de trabajo de una *software factory*:
 
-Para ejercitar y evidenciar el flujo de trabajo colaborativo que exige la metodología ágil
-(Scrum: ramas por funcionalidad, *Pull Requests* y revisión de código entre pares), el autor
-utiliza **dos cuentas de GitHub propias** con roles diferenciados: `lanusroots` actúa como
-*developer* (escribe el código y abre los PR) y `fernandezmaxar` actúa como *revisor* (aprueba
-los PR antes del *merge*). La protección de ramas impide integrar código sin una revisión
-aprobada, de modo que el *code review* es real y queda registrado en el historial del repositorio.
+- **`lanusroots`** — Desarrollador A: implementación de funcionalidades y revisión de código.
+- **`fernandezmaxar`** — Desarrollador B: implementación de funcionalidades y revisión de código.
+
+Ambas cuentas aportan código en ramas paralelas (`feature/HU-XX`) y se revisan mutuamente
+mediante *Pull Requests*. La configuración de ramas protegidas exige la aprobación de la cuenta
+opuesta antes de cada *merge* (GitHub no permite aprobar el propio PR), lo que garantiza que el
+ciclo de *code review* se ejecute de forma efectiva y no meramente formal.
+
+De este modo, el historial del repositorio refleja un proceso colaborativo real —commits de dos
+autores, PRs cruzados y revisiones documentadas— sin recurrir a la invención de integrantes. La
+doble autoría se declara explícitamente en este documento para preservar la transparencia del
+trabajo.
 
 Las ceremonias de equipo (dailies, *sprint reviews*, retrospectivas y actas) se documentan
-reflejando esta modalidad individual. La Parte I de este documento conserva el contenido de la
-Evidencia 1 tal como fue elaborada en la fase de arranque del proyecto.
+reflejando esta modalidad de desarrollo individual con dos roles. La Parte I de este documento
+conserva el contenido de la Evidencia 1 tal como fue elaborada en la fase de arranque del proyecto.
 
 ## Proceso de trabajo ágil
 
