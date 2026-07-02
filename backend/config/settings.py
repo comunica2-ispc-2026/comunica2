@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'usuarios',
 ]
 
 MIDDLEWARE = [
@@ -119,6 +120,8 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
 }
+
+AUTH_USER_MODEL = "usuarios.Usuario"
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
