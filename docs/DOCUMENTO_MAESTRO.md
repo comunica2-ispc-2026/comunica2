@@ -20,11 +20,12 @@
 
 | Fecha | Versión | Cambios | Autor |
 |-------|---------|---------|-------|
-| 26/04/2026 | 1.0 | Entrega Evidencia 1: situación, solución, requerimientos, backlog, actas | Equipo |
+| 30/06/2026 | 1.0 | Creación del documento — Definición del Proyecto: situación, solución, requerimientos, backlog (alcance de la Evidencia 1 según hoja de ruta) | lanusroots |
 | 30/06/2026 | 1.1 | Incorporación de Historias de Usuario (Parte II, sección 6) | lanusroots |
 | 30/06/2026 | 1.2 | Nota metodológica: desarrollo individual transparente | lanusroots |
 | 30/06/2026 | 1.3 | Proceso de trabajo ágil: Git Flow, DoR, DoD, Story Points, Code Review | lanusroots |
-| 01/07/2026 | 1.4 | Nota metodológica revisada: dos roles de desarrollo declarados, ambas cuentas aportan código | lanusroots |
+| 01/07/2026 | 1.4 | Nota metodológica revisada: dos roles de desarrollo declarados, ambas cuentas aportan código. Acta de Sprint Planning del Sprint 1 (sección 11) | lanusroots |
+| 02/07/2026 | 1.5 | Corrección de coherencia documental: se reemplazan las actas simuladas de la fase de definición por el registro real del proceso; se corrigen fechas y autoría en todo el documento | lanusroots |
 
 ## Nota metodológica
 
@@ -45,9 +46,10 @@ autores, PRs cruzados y revisiones documentadas— sin recurrir a la invención 
 doble autoría se declara explícitamente en este documento para preservar la transparencia del
 trabajo.
 
-Las ceremonias de equipo (dailies, *sprint reviews*, retrospectivas y actas) se documentan
-reflejando esta modalidad de desarrollo individual con dos roles. La Parte I de este documento
-conserva el contenido de la Evidencia 1 tal como fue elaborada en la fase de arranque del proyecto.
+Las ceremonias ágiles (planning, dailies, sprint reviews y retrospectivas) se documentan en la
+sección 11, reflejando la modalidad de desarrollo individual con dos roles. La Parte I contiene
+la Definición del Proyecto (alcance de la Evidencia 1 de la hoja de ruta); la sección 5 registra
+cómo se desarrolló esa fase.
 
 ## Proceso de trabajo ágil
 
@@ -115,7 +117,7 @@ en la plantilla de *Pull Request* del repositorio (`.github/pull_request_templat
 ---
 
 # PARTE I · Definición del Proyecto
-*Corresponde a la Evidencia 1 — entregada el 26/04/2026.*
+*Cubre el alcance de la Evidencia 1 (hoja de ruta, semana 6). Elaborada en junio de 2026.*
 
 ## 1. Situación problemática
 
@@ -138,7 +140,13 @@ El modelo depende completamente de que un niño no pierda, moje, rompa u olvide 
 **¿Por qué una solución digital puede ayudar?**
 Una aplicación web permitiría que los mensajes lleguen directamente al dispositivo de cada familiar, sin depender del alumno como intermediario físico. Reemplazaría la firma en papel por un acuse de lectura digital con fecha y hora, garantizando trazabilidad real. Además, centralizaría en un solo sistema el historial de comunicados, calificaciones e inasistencias, accesible para cada actor según su rol, desde cualquier lugar y en cualquier momento.
 
-**Proceso de detección (Pain Points).** El problema se eligió por consenso del equipo tras una dinámica de detección de Pain Points en la que se relevaron 13 problemas reales agrupados en salud, educación, comercio local y trámites. Se seleccionó la gestión de comunicaciones escolares en papel, identificada a partir de la experiencia real de un integrante como padre de una alumna de nivel primario.
+**Proceso de detección (Pain Points).** Para la elección del problema se aplicó la dinámica de
+detección de Pain Points propuesta por la cátedra, adaptada a la modalidad individual: se
+relevaron problemas reales del entorno cercano del autor en las áreas de salud, educación,
+comercio local y trámites, y se evaluó la viabilidad de los candidatos más fuertes. Se descartó
+una aplicación de turnos médicos por tratarse de un problema ya muy abordado en proyectos
+anteriores, y se seleccionó la gestión de comunicaciones escolares en papel, identificada a
+partir de la experiencia directa del autor como padre de una alumna de nivel primario.
 
 ## 2. Solución propuesta
 
@@ -242,39 +250,35 @@ El sistema no reemplaza un sistema de gestión escolar completo. No incluye liqu
 | BK24 | Documentación | Completar README del repositorio |
 | BK25 | Documentación | Redactar informe final del ABP |
 
-**Tablero ágil:** [insertar link de GitHub Projects] — *(ver sección Tablero Kanban)*
+**Tablero ágil:** "Comunica2 — Tablero Scrum" (GitHub Projects de la organización `comunica2-ispc-2026`) — 5 columnas: Product Backlog → Sprint Backlog → In Progress → Review → Done. *(Insertar URL pública del tablero.)*
 
-## 5. Actas de reunión
+## 5. Registro de la fase de definición
 
-### Acta N° 1 — Martes 17/03/2026 · 19:00–20:00 hs · Google Meet
-**Participantes:** Maximiliano Fernández (Moderador), Compañero 1 (Secretario), Compañero 2 (Timekeeper), Compañero 3 (Participante).
-**Temas:** presentación del espacio curricular y lectura del plan anual; presentación de integrantes; organización del equipo (canal de comunicación y herramienta de documentación); lectura de la consigna de la Evidencia 1.
-**Decisiones:** encuentros sincrónicos los martes 19:00 hs por Google Meet; Google Drive para documentos y WhatsApp para comunicación informal; próxima reunión enfocada en dinámica de Pain Points; nombre provisorio del equipo: Comunica2.
-**Tareas:** leer el plan completo (Todos, 20/03); preparar 3 problemas para Pain Points (Todos, 24/03); crear carpeta compartida en Drive (Compañero 1, 19/03).
+> Registro de las decisiones y el trabajo de la fase de definición del proyecto. Las actas de
+> ceremonias ágiles de la fase de construcción se registran en la sección 11.
 
-### Acta N° 2 — Martes 24/03/2026 · 19:00–20:15 hs · Google Meet
-**Participantes:** Compañero 1 (Moderador), Compañero 2 (Secretario), Compañero 3 (Timekeeper), Maximiliano Fernández (Participante).
-**Temas:** revisión de tareas; dinámica de Pain Points (13 problemas relevados en salud, educación, comercio local y trámites); evaluación de viabilidad; elección del problema por consenso.
-**Decisiones:** se elige la gestión de comunicaciones escolares en papel; se descarta una app de turnos médicos por ser un problema ya muy abordado; nombre definido: Comunica2; se acuerda Trello como tablero ágil y GitHub para el repositorio.
-**Tareas:** redactar la situación problemática (Maximiliano, 28/03); crear tablero en Trello (Compañero 3, 26/03); crear repositorio en GitHub con estructura de ramas (Compañero 2, 26/03); investigar soluciones similares (Compañero 1, 28/03).
+La fase de definición se desarrolló a fines de junio de 2026, siguiendo como lineamientos el
+flujo de Scrum con GitHub y el Manual de Simulación de Software Factory de la cátedra.
 
-### Acta N° 3 — Martes 31/03/2026 · 19:00–20:30 hs · Google Meet
-**Participantes:** Compañero 2 (Moderador), Compañero 3 (Secretario), Maximiliano Fernández (Timekeeper), Compañero 1 (Participante).
-**Temas:** revisión de tareas; revisión grupal de la situación problemática; definición de la solución propuesta; discusión del alcance; primeros requerimientos funcionales.
-**Decisiones:** se aprueba la situación problemática con ajustes menores; foco exclusivo en comunicación institución-familia; se identifican 4 módulos (autenticación y roles, comunicados, calificaciones, inasistencias); se valida viabilidad con la docente.
-**Tareas:** redactar la solución propuesta (Compañero 1, 04/04); listar RF (Maximiliano, 04/04); listar RNF (Compañero 2, 04/04); primeros ítems al tablero (Compañero 3, 04/04).
-
-### Acta N° 4 — Martes 07/04/2026 · 19:00–20:30 hs · Google Meet
-**Participantes:** Compañero 3 (Moderador), Maximiliano Fernández (Secretario), Compañero 1 (Timekeeper), Compañero 2 (Participante).
-**Temas:** revisión de tareas; ajuste grupal del listado de requerimientos; armado y priorización del backlog en Trello; configuración del repositorio (ramas main, develop, feature); distribución de tareas.
-**Decisiones:** se aprueban 20 RF y 7 RNF; backlog en tres columnas (Pendiente, En progreso, Hecho); 9 ítems Alta, 9 Media, 7 Baja; BK01 y BK24 movidos a En progreso.
-**Tareas:** ordenar el backlog en Trello (Compañero 3, 10/04); captura del tablero (Compañero 2, 10/04); iniciar el documento final (Maximiliano, 12/04); revisar ortografía y coherencia (Compañero 1, 14/04).
-
-### Acta N° 5 — Martes 14/04/2026 · 19:00–20:00 hs · Google Meet
-**Participantes:** Maximiliano Fernández (Moderador), Compañero 1 (Timekeeper), Compañero 2 (Secretario), Compañero 3 (Participante).
-**Temas:** lectura completa del documento final; revisión de coherencia entre secciones; verificación del backlog; correcciones finales; definición del nombre del PDF y responsable de la exportación.
-**Decisiones:** se aprueba el documento final; se ajusta la redacción de tres RF; se verifica acceso público al tablero; Maximiliano exporta el PDF y lo sube a Moodle.
-**Tareas:** exportar a PDF (Maximiliano, 20/04); verificar acceso al tablero (Compañero 3, 16/04); subir el PDF a Moodle (Maximiliano, 26/04).
+- **Elección del problema:** dinámica de Pain Points adaptada a la modalidad individual (ver
+  sección 1). El problema elegido nace de la experiencia directa del autor como padre de una
+  alumna de nivel primario.
+- **Definición de la solución y su alcance:** delimitación de los cuatro perfiles de usuario y
+  de los módulos del sistema (comunicados con acuse de lectura, calificaciones, inasistencias,
+  historial), con exclusión explícita de la gestión escolar integral (sección 2).
+- **Requerimientos:** redacción de los 20 requerimientos funcionales y 7 no funcionales
+  (sección 3).
+- **Backlog inicial:** 25 ítems priorizados en tres niveles (sección 4).
+- **Historias de Usuario:** consolidación de los 20 RF en 14 HU con criterios de aceptación en
+  formato DADO/CUANDO/ENTONCES y trazabilidad RF↔HU (sección 6).
+- **Sprint 0 (30/06/2026):** montaje completo de la estructura de trabajo — organización y
+  repositorio en GitHub (monorepo `backend/ frontend/ database/ docs/`), Git Flow con ramas
+  `main` y `develop` protegidas (PR + 1 aprobación, sin bypass), doble identidad local
+  verificada mediante un PR de prueba con revisión cruzada, plantilla de PR con el checklist de
+  calidad de la cátedra, tablero Kanban de 5 columnas, labels, milestones (Sprints 0, 1 y 2) y
+  carga de las 14 HU como issues con Story Points. El Sprint 0 se cerró el mismo día con sus 9
+  tareas en *Done*.
+- **Sprint Planning del Sprint 1 (01/07/2026):** ver acta en la sección 11.
 
 ---
 
@@ -432,7 +436,7 @@ Documentación de endpoints con Swagger / Postman.
 
 ## 11. Actas de ceremonias ágiles (fase de desarrollo)
  
-> Registro de las ceremonias Scrum de la fase de construcción (recuperación). Se documentan bajo la modalidad de desarrollo individual con dos roles declarada en la Nota metodológica.
+> Registro de las ceremonias Scrum de la fase de construcción. Se documentan bajo la modalidad de desarrollo individual con dos roles declarada en la Nota metodológica.
  
 ### Sprint Planning — Sprint 1 — Miércoles 01/07/2026 · Modalidad: planificación individual (roles Dev A / Dev B)
  
