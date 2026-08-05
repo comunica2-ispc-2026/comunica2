@@ -1,13 +1,13 @@
-"""Serializers del bloque alumnos — HU-04 (Seccion + Alumno).
+"""Serializers del bloque alumnos.
 
 Las reglas de dominio que el modelo a propósito no impone viven acá (mismo
 criterio que el spike de login: la validación es del serializer, no del .save()).
-El serializer de `Vinculo` llega en HU-05.
 """
 
 from rest_framework import serializers
 
-from .models import Alumno, Seccion
+from usuarios.models import Usuario
+from .models import Alumno, Seccion, Vinculo
 
 
 class SeccionSerializer(serializers.ModelSerializer):
@@ -20,6 +20,24 @@ class SeccionSerializer(serializers.ModelSerializer):
             "id", "nivel", "nivel_display",
             "nombre", "turno", "turno_display", "activa",
         ]
+
+
+class VinculoSerializer(serializers.ModelSerializer):
+    parentesco_display = serializers.CharField(
+        source="get_parentesco_display", read_only=True
+    )
+
+    class Meta:
+        model = Vinculo
+        fields = ["id", "usuario", "alumno", "parentesco", "parentesco_display", "activo"]
+
+    def validate_usuario(self, value):
+        # Regla de dominio: solo se vincula a usuarios de rol FAMILIA.
+        if value.rol != Usuario.Rol.FAMILIA:
+            raise serializers.ValidationError(
+                "El usuario vinculado debe tener rol FAMILIA."
+            )
+        return value
 
 
 class AlumnoSerializer(serializers.ModelSerializer):

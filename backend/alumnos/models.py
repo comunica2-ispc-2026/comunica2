@@ -1,19 +1,22 @@
 """
 App `alumnos` — núcleo académico de Comunica2.
 
-Modela lo que la libreta en papel no puede: quiénes son los alumnos y en qué
-sección están. Cubre RF05 y RF07 (backlog Alta BK07). El vínculo con las
-familias (RF06) llega en HU-05, sobre esta base.
+Modela lo que la libreta en papel no puede: quiénes son los alumnos, en qué
+sección están, y qué familiares están habilitados a recibir/acusar sus
+comunicados. Cubre RF05, RF06 y RF07 (backlog Alta BK07).
 
 Decisiones que viajan al oficial:
 - El alumno NO es un Usuario (no logea). La familia actúa por él. Los 4 roles
   del sistema son administrador/autoridad/docente/familia (RF01); ninguno es
   alumno.
+- La relación familia<->alumno es N a N con atributos propios -> tabla
+  intermedia explícita (`Vinculo`), no un ManyToManyField pelado.
 - El campo `dni` reusa el patrón del spike de login: CharField (no Integer, para
   no perder ceros a la izquierda) + RegexValidator. La validación la garantizan
   serializers/forms, no el .save() directo.
 """
 
+from django.conf import settings
 from django.core.validators import RegexValidator
 from django.db import models
 
@@ -30,7 +33,7 @@ class Seccion(models.Model):
         MANANA = "MANANA", "Mañana"
         TARDE = "TARDE", "Tarde"
 
-    nivel = models.CharField(max_length=12, choices=Nivel.choices, default=Nivel.PRIMARIA)
+    nivel= models.CharField(max_length=12, choices=Nivel.choices, default=Nivel.PRIMARIA)
     nombre = models.CharField(max_length=20, help_text='Ej. "3°A" o "Sala 2"')
     turno = models.CharField(max_length=10, choices=Turno.choices, default=Turno.MANANA)
     activa = models.BooleanField(default=True)
@@ -49,12 +52,12 @@ class Seccion(models.Model):
 
 class Alumno(models.Model):
     """Entidad central. Campos según RF05 (nombre, apellido, DNI, sección,
-    turno, domicilio).
+    turno, domicilio y contactos).
 
     - `turno` no se guarda acá: se deriva de la sección (`alumno.seccion.turno`),
       así no puede quedar inconsistente con ella.
-    - Los familiares (RF06) llegan en HU-05 vía la tabla `Vinculo`; en esta HU el
-      alumno existe por sí mismo.
+    - `contactos` = los familiares vinculados (ver `familiares` / `Vinculo`); no
+      hace falta una tabla aparte.
     """
 
     nombre = models.CharField(max_length=100)
@@ -73,6 +76,13 @@ class Alumno(models.Model):
         blank=True,
     )
 
+    # Acceso cómodo a los familiares; la tabla real con atributos es `Vinculo`.
+    familiares = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through="Vinculo",
+        related_name="alumnos",
+    )
+
     activo = models.BooleanField(default=True)
 
     class Meta:
@@ -84,3 +94,42 @@ class Alumno(models.Model):
 
     def __str__(self):
         return f"{self.apellido}, {self.nombre} ({self.dni})"
+
+
+class Vinculo(models.Model):
+    """Relación familia<->alumno (RF06). Tabla intermedia con atributos.
+
+    `unique_together(usuario, alumno)` evita duplicar el mismo vínculo.
+    `activo` permite desvincular sin borrar el historial del vínculo.
+    """
+
+    class Parentesco(models.TextChoices):
+        MADRE = "MADRE", "Madre"
+        PADRE = "PADRE", "Padre"
+        TUTOR = "TUTOR", "Tutor/a"
+        OTRO = "OTRO", "Otro"
+
+    usuario = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="vinculos",
+    )
+    alumno = models.ForeignKey(
+        Alumno,
+        on_delete=models.CASCADE,
+        related_name="vinculos",
+    )
+    parentesco = models.CharField(
+        max_length=10, choices=Parentesco.choices, default=Parentesco.OTRO
+    )
+    activo = models.BooleanField(default=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["usuario", "alumno"], name="uniq_vinculo_usuario_alumno"
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.usuario} → {self.alumno} ({self.get_parentesco_display()})"
