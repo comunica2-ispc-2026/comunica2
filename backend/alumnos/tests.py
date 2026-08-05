@@ -1,22 +1,17 @@
-"""Tests de HU-04 — registro y gestión de alumnos.
+"""Tests de alumnos — HU-04 (registro) + HU-05 (vínculo familia y mis-alumnos).
 
-`APITestCase` sobre DB de test aislada. Cubre:
-- Acceso: admin lee/escribe; docente/autoridad leen; familia -> 403; sin token -> 401.
-- Alta de alumno por el admin, con y sin sección (RF07).
-- Filtro ?seccion=<id>.
-- Baja lógica: DELETE apaga `activo` (no borra la fila).
+`APITestCase` sobre DB de test aislada.
 """
 
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from rest_framework.test import APITestCase
+from rest_framework.test import APIClient, APITestCase
 
 from usuarios.models import Usuario
-from .models import Alumno, Seccion
+from .models import Alumno, Seccion, Vinculo
 
 
 def _cliente(user):
-    from rest_framework.test import APIClient
     c = APIClient()
     if user is not None:
         token, _ = Token.objects.get_or_create(user=user)
@@ -42,7 +37,6 @@ class AlumnosTests(APITestCase):
         base.update(kw)
         return base
 
-    # --- acceso ---
     def test_sin_token_401(self):
         self.assertEqual(self.c_anon.get("/api/alumnos/").status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -50,21 +44,18 @@ class AlumnosTests(APITestCase):
         self.assertEqual(self.c_docente.get("/api/alumnos/").status_code, status.HTTP_200_OK)
 
     def test_familia_no_lee_403(self):
-        # La familia no entra por este endpoint (usa mis-alumnos, HU-05).
         self.assertEqual(self.c_familia.get("/api/alumnos/").status_code, status.HTTP_403_FORBIDDEN)
 
     def test_docente_no_escribe_403(self):
         r = self.c_docente.post("/api/alumnos/", self._payload(), format="json")
         self.assertEqual(r.status_code, status.HTTP_403_FORBIDDEN)
 
-    # --- alta ---
     def test_admin_crea_alumno_con_seccion(self):
         r = self.c_admin.post("/api/alumnos/", self._payload(seccion=self.sec.id), format="json")
         self.assertEqual(r.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(r.json()["turno"], Seccion.Turno.MANANA)  # turno derivado de la sección
+        self.assertEqual(r.json()["turno"], Seccion.Turno.MANANA)
 
     def test_admin_crea_alumno_sin_seccion(self):
-        # RF07: un alumno puede existir antes de ser asignado a una sección.
         r = self.c_admin.post("/api/alumnos/", self._payload(dni="50000009"), format="json")
         self.assertEqual(r.status_code, status.HTTP_201_CREATED)
         self.assertIsNone(r.json()["turno"])
@@ -73,7 +64,6 @@ class AlumnosTests(APITestCase):
         r = self.c_admin.post("/api/alumnos/", self._payload(dni="ABC123"), format="json")
         self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
 
-    # --- filtro ---
     def test_filtro_por_seccion(self):
         Alumno.objects.create(nombre="Ben", apellido="Q", dni="50000002", seccion=self.sec)
         otra = Seccion.objects.create(nivel=Seccion.Nivel.PRIMARIA, nombre="3B", turno=Seccion.Turno.TARDE)
@@ -82,9 +72,70 @@ class AlumnosTests(APITestCase):
         dnis = {a["dni"] for a in r.json()["results"]}
         self.assertEqual(dnis, {"50000002"})
 
-    # --- baja lógica ---
     def test_delete_es_baja_logica(self):
         alu = Alumno.objects.create(nombre="Dan", apellido="S", dni="50000004", seccion=self.sec)
         r = self.c_admin.delete(f"/api/alumnos/{alu.id}/")
         self.assertEqual(r.status_code, status.HTTP_204_NO_CONTENT)
         self.assertTrue(Alumno.objects.filter(id=alu.id, activo=False).exists())
+
+
+class VinculoTests(APITestCase):
+    def setUp(self):
+        self.admin = Usuario.objects.create(username="41000001", dni="41000001", rol=Usuario.Rol.ADMINISTRADOR)
+        self.familia = Usuario.objects.create(username="41000002", dni="41000002", rol=Usuario.Rol.FAMILIA)
+        self.docente = Usuario.objects.create(username="41000003", dni="41000003", rol=Usuario.Rol.DOCENTE)
+        self.alumno = Alumno.objects.create(nombre="Ana", apellido="P", dni="51000001")
+        self.c_admin = _cliente(self.admin)
+
+    def test_admin_vincula_familia(self):
+        r = self.c_admin.post(
+            "/api/vinculos/",
+            {"usuario": self.familia.id, "alumno": self.alumno.id, "parentesco": Vinculo.Parentesco.MADRE},
+            format="json",
+        )
+        self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+
+    def test_vinculo_a_no_familia_400(self):
+        # Regla de dominio del serializer: solo se vincula a usuarios rol FAMILIA.
+        r = self.c_admin.post(
+            "/api/vinculos/",
+            {"usuario": self.docente.id, "alumno": self.alumno.id},
+            format="json",
+        )
+        self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_vinculo_duplicado_400(self):
+        Vinculo.objects.create(usuario=self.familia, alumno=self.alumno)
+        r = self.c_admin.post(
+            "/api/vinculos/",
+            {"usuario": self.familia.id, "alumno": self.alumno.id},
+            format="json",
+        )
+        self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_delete_vinculo_es_baja_logica(self):
+        v = Vinculo.objects.create(usuario=self.familia, alumno=self.alumno)
+        r = self.c_admin.delete(f"/api/vinculos/{v.id}/")
+        self.assertEqual(r.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertTrue(Vinculo.objects.filter(id=v.id, activo=False).exists())
+
+
+class MisAlumnosTests(APITestCase):
+    def setUp(self):
+        self.mama = Usuario.objects.create(username="42000001", dni="42000001", rol=Usuario.Rol.FAMILIA)
+        self.otra = Usuario.objects.create(username="42000002", dni="42000002", rol=Usuario.Rol.FAMILIA)
+        self.hijo = Alumno.objects.create(nombre="Ana", apellido="P", dni="52000001")
+        self.ajeno = Alumno.objects.create(nombre="Ben", apellido="Q", dni="52000002")
+        Vinculo.objects.create(usuario=self.mama, alumno=self.hijo)
+        Vinculo.objects.create(usuario=self.otra, alumno=self.ajeno)
+
+    def test_familia_ve_solo_sus_hijos(self):
+        r = _cliente(self.mama).get("/api/mis-alumnos/")
+        self.assertEqual(r.status_code, status.HTTP_200_OK)
+        dnis = {a["dni"] for a in r.json()["results"]}
+        self.assertEqual(dnis, {"52000001"})
+
+    def test_no_ve_hijos_ajenos(self):
+        r = _cliente(self.mama).get("/api/mis-alumnos/")
+        dnis = {a["dni"] for a in r.json()["results"]}
+        self.assertNotIn("52000002", dnis)
