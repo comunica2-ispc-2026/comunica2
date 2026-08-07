@@ -1,20 +1,20 @@
-from rest_framework import status
+from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import DNIAuthTokenSerializer
+from .serializers import (
+    CambioPasswordPropioSerializer,
+    DNIAuthTokenSerializer,
+    PerfilSerializer,
+)
 
 
 class LoginDNIView(ObtainAuthToken):
-    """POST /api/auth/login/ — login por DNI.
-
-    Devuelve el token y los datos básicos del usuario, incluido el `rol`, que el
-    cliente usa como base de su control de acceso. Endpoint abierto: `ObtainAuthToken`
-    trae `permission_classes` vacío, así que no lo alcanza el `IsAuthenticated` global.
-    """
+    """POST /api/auth/login/ — login por DNI. Endpoint abierto (ObtainAuthToken
+    trae permission_classes vacío)."""
 
     serializer_class = DNIAuthTokenSerializer
 
@@ -37,14 +37,36 @@ class LoginDNIView(ObtainAuthToken):
 
 
 class LogoutView(APIView):
-    """POST /api/auth/logout/ — invalida el token del usuario autenticado.
-
-    Requiere token: es el endpoint que ejerce la "API cerrada por defecto"
-    (`IsAuthenticated`). Borrar el token corta las credenciales del lado servidor.
-    """
+    """POST /api/auth/logout/ — invalida el token del usuario autenticado."""
 
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         Token.objects.filter(user=request.user).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PerfilView(generics.RetrieveUpdateAPIView):
+    """GET/PATCH /api/auth/me/ — el usuario ve y edita SU propio perfil (datos de
+    contacto). El objeto es siempre request.user, nunca un id de la URL."""
+
+    serializer_class = PerfilSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+
+class CambiarPasswordView(APIView):
+    """POST /api/auth/cambiar-password/ — cambio de la propia contraseña."""
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = CambioPasswordPropioSerializer(
+            data=request.data, context={"user": request.user}
+        )
+        serializer.is_valid(raise_exception=True)
+        request.user.set_password(serializer.validated_data["password_nueva"])
+        request.user.save(update_fields=["password"])
+        return Response({"detail": "Contraseña actualizada."})
