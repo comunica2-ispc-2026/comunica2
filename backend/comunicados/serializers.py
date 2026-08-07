@@ -1,12 +1,15 @@
 """
-Serializers de la app `comunicados` (fase 1).
+Serializers de la app `comunicados`.
 
+Dos serializers, dos audiencias:
 - `ComunicadoSerializer`: el emisor (admin/autoridad/docente). Trae el conteo de
   acuse (destinatarios / acusados) sin query aparte. La coherencia
   tipo_destino<->localizadores se delega en `Comunicado.errores_coherencia`
-  (misma regla que el `clean()` del modelo, sin duplicarla) y se devuelve como 400.
-- `EntregaComunicadoSerializer`: la vista de estado del emisor y (en HU-08) la
-  bandeja del familiar. De solo lectura; el acuse va por una accion, no por PATCH.
+  (misma regla que el `clean()` del modelo, sin duplicarla) y se devuelve como
+  400. El control de *alcance* (destino subset del alcance del emisor) NO va aca:
+  es autorizacion y se resuelve en la vista como 403 (ver views.perform_create).
+- `EntregaComunicadoSerializer`: el familiar (su bandeja) y la vista de estado
+  del emisor. De solo lectura; el acuse va por una accion, no por PATCH.
 """
 
 from rest_framework import serializers
@@ -33,6 +36,10 @@ class ComunicadoSerializer(serializers.ModelSerializer):
             "tipo_destino",
             "alumno",
             "seccion",
+            "nivel",
+            "turno",
+            "grupo",
+            "categoria",
             "destino_descripcion",
             "requiere_acuse",
             "creado_en",
@@ -51,6 +58,9 @@ class ComunicadoSerializer(serializers.ModelSerializer):
             actual("tipo_destino"),
             alumno=actual("alumno"),
             seccion=actual("seccion"),
+            nivel=actual("nivel"),
+            turno=actual("turno"),
+            grupo=actual("grupo"),
         )
         if errores:
             raise serializers.ValidationError(errores)
